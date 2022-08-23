@@ -1,0 +1,40 @@
+postgresql:
+  auth:
+    database: test
+    postgresPassword: password
+  fullnameOverride: postgresql
+  primary:
+    persistence:
+      size: 20Gi
+test:
+  env:
+  - name: DatabaseUser
+    value: admin
+  - name: DatabasePassword
+    value: password
+  - name: DatabaseHost
+    value: postgresql
+  - name: test
+    value: DB_NAME
+  fullnameOverride: test
+  image:
+    repository: ghcr.io/forkmain-bot/testrepo
+    tag: main
+  imagePullSecrets:
+  - name: testzhangze-docker
+  nocalhost:
+    command:
+      debug: yarn install && yarn dev
+      run: yarn install && yarn dev
+    configPath: conf/nocalhost.yaml
+    env: null
+    gitURL: https://github.com/forkmain-bot/testrepo.git
+    hotReload: false
+    image: ghcr.io/forkmain-bot/testrepo
+    language: vite
+    persistentVolumeDirs:
+    - capacity: 20Gi
+      path: /home/nocalhost-dev
+    remoteDebugPort: 9009
+  service:
+    targetPort: 3000
